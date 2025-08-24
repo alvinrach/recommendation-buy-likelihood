@@ -1,6 +1,25 @@
 ## Data
+The data can be taken from the ecommerce app we already have. If there's no data yet, we can crawl our data in another web or get it legally in Open Data platform like Kaggle.
 
 ## Features & Rationale
+### Recommendation System
+1. Product Data
+- Product Name
+- Description
+- Ingredients
+
+2. User Data
+- Concerns
+- Skin Type
+- Age Group
+- Past Purchase
+
+### Buy Likelihood
+1. Sessions (past 7 days)
+2. Average Duration
+3. Products Viewed
+4. Cart Adds
+
 
 ## Techniques
 ### Recommendation System
