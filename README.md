@@ -125,8 +125,8 @@ If neural network is used, then the training will be done each epoch. Here is th
 ## Deploy
 
 ### Prototyping
-![Recommender Prototype](https://github.com/alvinrach/Product-Recommender-System/blob/main/images/recommender.png?raw=true)
-![Buy Likelihood Prototype](https://github.com/alvinrach/Product-Recommender-System/blob/main/images/buy-likelihood.png?raw=true)
+![Recommender Prototype](https://github.com/alvinrach/recommendation-buy-likelihood/blob/main/images/recommender.png?raw=true)
+![Buy Likelihood Prototype](https://github.com/alvinrach/recommendation-buy-likelihood/blob/main/images/buy-likelihood.png?raw=true)
 
 ### Deployment
 1. Choice between on-premise vs cloud-based
