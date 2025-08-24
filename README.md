@@ -144,11 +144,56 @@ If neural network is used, then the training will be done each epoch. Here is th
 ## Deploy
 
 ### Prototyping
+
+#### Recommendation System
 ![Recommender Prototype](https://github.com/alvinrach/recommendation-buy-likelihood/blob/main/images/recommender.png?raw=true)
+
+#### Buy Likelihood
 ![Buy Likelihood Prototype](https://github.com/alvinrach/recommendation-buy-likelihood/blob/main/images/buy-likelihood.png?raw=true)
 
 ### Deployment
-1. Choice between on-premise vs cloud-based
-2. Choice between VM, serverless or kubernetes
-3. CI/CD (DevOps)
-4. Model monitoring (MLOps)
+
+#### ML model deployment
+1. Model Deployment Strategy
+
+- Deployment pattern - REST API, batch inference, or real-time streaming  
+- Model versioning - A/B testing between model versions, rollback procedures  
+- Environment promotion - Model validation gates before production  
+
+2. Model Monitoring & Observability
+
+- Performance metrics - Accuracy, latency, throughput in production  
+- Data drift detection - Input data distribution changes over time  
+- Model degradation alerts - Automated alerts when performance drops  
+
+3. Infrastructure & Integration
+
+- Scaling strategy - Handle varying inference loads (auto-scaling, caching)  
+- Data pipeline integration - How training/inference data flows through systems  
+- Fallback mechanisms - What happens if model fails (default rules, previous model version)  
+
+4. CI/CD Pipeline (& MLOps)
+
+- Model training pipeline - Automated retraining triggers and validation  
+- Model deployment automation - Automated testing and promotion to production  
+- Version control - Model artifacts, code, and configuration management  
+
+#### Data Pipeline
+
+1. Pipeline Orchestration & Scheduling
+
+- Workflow management - How jobs are scheduled, dependencies managed, retry logic  
+- Data processing patterns - Batch vs streaming, micro-batching intervals  
+- Error handling - Failed job recovery, data quality validation gates  
+
+2. Data Quality & Monitoring
+
+- Data validation - Schema validation, data completeness checks, anomaly detection  
+- Pipeline observability - Job success rates, processing times, data lineage tracking  
+- Alerting - Data freshness alerts, volume anomalies, processing failures  
+
+3. Scalability & Resource Management
+
+- Elastic processing - Auto-scaling compute resources based on data volume  
+- Storage optimization - Data partitioning, compression, archival strategies  
+- Performance tuning - Bottleneck identification, parallelization, resource allocation  
