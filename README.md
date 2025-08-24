@@ -1,25 +1,45 @@
-## Data
-The data can be taken from the ecommerce app we already have. If there's no data yet, we can crawl our data in another web or get it legally in Open Data platform like Kaggle.
+## Data Sources & Acquisition Strategy
+### Primary Data Source: Internal Platform
+Customer transaction histories, browsing behaviors, and product interactions are captured through the existing e-commerce infrastructure. User profiles containing skin types, concerns, and demographic information are collected during registration. Product catalogs with ingredients, pricing, and ratings are maintained in the current inventory system.
+
+### External Data Sources (If Required)
+**Web crawling** will be implemented to collect supplementary data from established beauty retailers while ensuring compliance with robots.txt and terms of service. **Kaggle datasets** such as "Sephora Products and Skincare Reviews" (8K+ products, 1M+ reviews) and "E-Commerce User Behavior Data" (285M+ user events) will provide additional training data for model development and benchmarking.
+
+### Data Integration
+Standardized schemas and validation processes will ensure data quality when combining internal and external sources. Privacy compliance will be maintained through anonymization and adherence to local data protection regulations.
 
 ## Features & Rationale
-### Recommendation System
+### Recommendation System Features
 1. Product Data
-- Product Name
-- Description
-- Ingredients
+- Product Name & Description: Essential identifiers that enable content-based filtering through text similarity analysis. Product descriptions are processed using NLP techniques to extract key attributes and match them with user preferences and concerns.
+- Ingredients: Critical for skincare recommendations as ingredient compatibility directly impacts user satisfaction and safety. Ingredient vectors are created to measure similarity between products and match against user's skin sensitivities or preferences (e.g., users preferring retinol-based products).
+- Price: Enables price-based filtering to respect user budget constraints and spending patterns. Historical purchase data reveals price sensitivity, allowing recommendations within appropriate price ranges to improve conversion likelihood.
+- Rating: Quality indicator that influences recommendation ranking. High-rated products are prioritized to ensure user satisfaction, while rating patterns help identify trending or trusted products within specific categories.
 
 2. User Data
-- Concerns
-- Skin Type
-- Age Group
-- Past Purchase
+- Concerns: Primary driver for personalized recommendations as skincare needs vary significantly (acne, aging, hyperpigmentation). Concern-based filtering ensures recommended products address specific user problems, improving relevance and purchase intent.
+- Skin Type: Fundamental compatibility filter preventing recommendations of unsuitable products (e.g., oil-based products for oily skin). This hard constraint ensures user safety and satisfaction while reducing return rates.
+- Age Group: Influences product suitability as skincare needs evolve with age. Younger users may prefer acne-focused products while mature users seek anti-aging solutions, enabling age-appropriate recommendations.
+- Past Purchase: Reveals user preferences, brand loyalty, and category exploration patterns. Purchase history enables collaborative filtering and identifies complementary products for cross-selling opportunities.
 
-### Buy Likelihood
-1. Sessions (past 7 days)
-2. Average Duration
-3. Products Viewed
-4. Cart Adds
+### Purchase Likelihood Features
+1. Behavioral Features
+- Page views (7/14/30 days): Indicates engagement level and purchase intent. Higher page view frequency suggests active product research, while declining views may indicate lost interest requiring re-engagement campaigns.
+- Time spent on product pages: Quality engagement metric showing genuine interest versus casual browsing. Extended time on specific products indicates serious consideration and higher purchase probability.
+- Cart additions/removals: Strong purchase intent signals, with cart additions showing immediate buying interest. Cart removal patterns help identify price sensitivity or product comparison behaviors.
+- Search queries and patterns: Reveals user intent and specific needs. Specific ingredient searches or problem-focused queries indicate higher purchase likelihood than general browsing patterns.
+- Session frequency and duration: Overall engagement indicators showing user loyalty and platform familiarity. Frequent, longer sessions suggest higher lifetime value and purchase probability.
 
+2. Temporal Features
+- Days since last visit: Recency indicator affecting purchase likelihood. Recent visitors show higher engagement, while extended absence may indicate churn risk requiring targeted re-engagement efforts.
+- Seasonality patterns: Captures cyclical purchasing behaviors influenced by weather, holidays, or personal routines. Seasonal adjustments improve prediction accuracy during peak buying periods.
+- Purchase cycle patterns: Individual user purchasing rhythms based on product consumption rates. Understanding personal replenishment cycles enables proactive targeting before product depletion.
+
+3. Product Interaction Features
+- Categories viewed: Shows breadth of interest and routine completeness. Users exploring multiple categories (cleanser, serum, moisturizer) indicate comprehensive routine building with higher basket values.
+- Price ranges browsed: Reveals budget constraints and willingness to pay premium prices. Price browsing patterns help predict purchase likelihood within specific price segments.
+- Product ratings viewed: Research behavior indicating purchase consideration. Users checking ratings and reviews demonstrate serious buying intent and quality consciousness.
+- Reviews read: Deep engagement signal showing thorough product evaluation. Review reading patterns correlate with purchase decision-making and reduce post-purchase regret likelihood.
 
 ## Techniques
 ### Recommendation System
@@ -42,6 +62,23 @@ In the product recommendation system approach by collaborative filtering using t
 The advantage of collaborative filtering is that it is not difficult to measure metrics. While the drawback is that it cannot be used if there is no user rating/rating data for the item.
 
 ### Buy Likelihood
+Traditional Machine Learning:
+1. Logistic Regression:
+Interpretable coefficients are provided, making it suitable as a baseline model. Feature relationships can be easily understood by business stakeholders.
+2. Random Forest:
+Feature interactions are automatically handled through ensemble methods. Feature importance scores are generated to identify key predictive behaviors.
+3. Gradient Boosting (XGBoost/LightGBM):
+Superior performance on tabular data is typically achieved. Complex behavioral patterns are captured while overfitting is prevented through cross-validation.
+4. Support Vector Machines:
+High-dimensional feature spaces are effectively handled through kernel transformations. Non-linear decision boundaries are created for complex user behavior patterns.
+
+Deep Learning:
+1. Neural Networks:
+Complex non-linear relationships are automatically learned through multiple layers. Feature engineering requirements are reduced as patterns are discovered in raw data.
+2. LSTM/GRU:
+Sequential user behavior patterns are processed through recurrent architectures. Time-dependent relationships in browsing and purchase sequences are captured.
+
+Based on the e-commerce purchase prediction requirements, Gradient Boosting (XGBoost/LightGBM) is recommended as the primary approach. This choice is justified because superior performance on tabular behavioral data is consistently achieved, while interpretability is maintained through feature importance rankings that business stakeholders can understand. The inherent class imbalance in e-commerce conversion rates (typically 2-5%) is effectively handled through built-in class weighting parameters, and robust performance is ensured through cross-validation techniques. Additionally, the model's ability to capture complex feature interactions between user behaviors (session patterns, product views, cart activities) without requiring extensive feature engineering makes it well-suited for production deployment where new behavioral signals may emerge over time. However, extensive experimentation will be conducted across multiple algorithms to ensure optimal performance.
 
 ## Evaluation
 ### Recommendation System
@@ -139,61 +176,65 @@ If neural network is used, then the training will be done each epoch. Here is th
 
 ### Buy Likelihood
 
+1. Technical Performance Metrics:
+AUC-ROC will be calculated to measure the model's ability to distinguish between purchasers and non-purchasers across all classification thresholds. AUC-PR (Precision-Recall) will be prioritized over AUC-ROC due to the severe class imbalance inherent in e-commerce conversion rates, as it better reflects performance on the minority class. F1-Score will be computed to balance precision and recall trade-offs, while precision and recall will be evaluated at business-relevant thresholds to optimize for specific campaign targeting requirements.
+2. Business-Oriented Metrics:
+Lift analysis will be conducted to quantify improvement over random targeting, with measurements taken at different percentile cuts (top 10%, 20%, 30% of predicted users). Conversion rate within the top-scored segments will be calculated to directly translate model performance into expected campaign effectiveness. Customer Acquisition Cost (CAC) reduction will be measured by comparing marketing efficiency before and after model implementation, while Return on Investment (ROI) will be calculated based on increased revenue from improved targeting accuracy.
+3. Validation Strategy:
+Time-based cross-validation will be implemented to prevent data leakage, where models are trained on historical periods and tested on future time windows. Stratified sampling will maintain class distribution across validation folds, ensuring representative evaluation despite class imbalance. Walk-forward validation will simulate real-world deployment scenarios, with model performance monitored across multiple time periods to assess stability and generalization capability.
+
 ## Business Impact
 
 ## Deploy
-
 ### Prototyping
-
 #### Recommendation System
+Here is the prototype for recommendation system in React. For example, user_002 has dry type skin, aging and wrinkles concerns, 35-44 age group and 2 past purchases. Here in the planned dashboard we will show several related products to this user, ordered by match score.
+
 ![Recommender Prototype](https://github.com/alvinrach/recommendation-buy-likelihood/blob/main/images/recommender.png?raw=true)
 
 #### Buy Likelihood
+And this is the prototype of buy likelihood dashboard in React. We have features that we already process, such as sessions, average duration, products viewed and cart adds. In the label or target area we have purchase probability and intent segment, which are:
+
+🟢 Green: High probability (>60%) = High Intent = Good for business
+🟡 Yellow: Medium probability (30-60%) = Medium Intent = Moderate
+🔴 Red: Low probability (<30%) = Low Intent = Needs attention
+
 ![Buy Likelihood Prototype](https://github.com/alvinrach/recommendation-buy-likelihood/blob/main/images/buy-likelihood.png?raw=true)
 
 ### Deployment
-
 #### ML model deployment
 1. Model Deployment Strategy
-
 - Deployment pattern - REST API, batch inference, or real-time streaming  
 - Model versioning - A/B testing between model versions, rollback procedures  
 - Environment promotion - Model validation gates before production  
 
 2. Model Monitoring & Observability
-
 - Performance metrics - Accuracy, latency, throughput in production  
 - Data drift detection - Input data distribution changes over time  
 - Model degradation alerts - Automated alerts when performance drops  
 
 3. Infrastructure & Integration
-
 - Scaling strategy - Handle varying inference loads (auto-scaling, caching)  
 - Data pipeline integration - How training/inference data flows through systems  
 - Fallback mechanisms - What happens if model fails (default rules, previous model version)  
 
 4. CI/CD Pipeline (& MLOps)
-
 - Model training pipeline - Automated retraining triggers and validation  
 - Model deployment automation - Automated testing and promotion to production  
 - Version control - Model artifacts, code, and configuration management  
 
 #### Data Pipeline
-
 1. Pipeline Orchestration & Scheduling
-
 - Workflow management - How jobs are scheduled, dependencies managed, retry logic  
 - Data processing patterns - Batch vs streaming, micro-batching intervals  
 - Error handling - Failed job recovery, data quality validation gates  
 
 2. Data Quality & Monitoring
-
 - Data validation - Schema validation, data completeness checks, anomaly detection  
 - Pipeline observability - Job success rates, processing times, data lineage tracking  
 - Alerting - Data freshness alerts, volume anomalies, processing failures  
 
 3. Scalability & Resource Management
-
 - Elastic processing - Auto-scaling compute resources based on data volume  
 - Storage optimization - Data partitioning, compression, archival strategies  
 - Performance tuning - Bottleneck identification, parallelization, resource allocation  
