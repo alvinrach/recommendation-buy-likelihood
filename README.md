@@ -42,7 +42,7 @@ Standardized schemas and validation processes will ensure data quality when comb
 - Reviews read: Deep engagement signal showing thorough product evaluation. Review reading patterns correlate with purchase decision-making and reduce post-purchase regret likelihood.
 
 ## Techniques
-### Recommendation System
+### Recommendation System Techniques
 #### Content-Based Filtering
 Content-based filtering recommends items similar to other items in the past. For example, if someone likes dolls, the system also recommends those that have similar feature values to dolls. Dolls are categorized as women's goods, so women's goods will also be recommended to users who buy dolls. What has just been mentioned is just an example, it can also involve other features to create the recommendation system.
 
@@ -61,7 +61,7 @@ In the product recommendation system approach by collaborative filtering using t
 
 The advantage of collaborative filtering is that it is not difficult to measure metrics. While the drawback is that it cannot be used if there is no user rating/rating data for the item.
 
-### Buy Likelihood
+### Purchase Likelihood Techniques
 Traditional Machine Learning:
 1. Logistic Regression:
 Interpretable coefficients are provided, making it suitable as a baseline model. Feature relationships can be easily understood by business stakeholders.
@@ -81,7 +81,7 @@ Sequential user behavior patterns are processed through recurrent architectures.
 Based on the e-commerce purchase prediction requirements, Gradient Boosting (XGBoost/LightGBM) is recommended as the primary approach. This choice is justified because superior performance on tabular behavioral data is consistently achieved, while interpretability is maintained through feature importance rankings that business stakeholders can understand. The inherent class imbalance in e-commerce conversion rates (typically 2-5%) is effectively handled through built-in class weighting parameters, and robust performance is ensured through cross-validation techniques. Additionally, the model's ability to capture complex feature interactions between user behaviors (session patterns, product views, cart activities) without requiring extensive feature engineering makes it well-suited for production deployment where new behavioral signals may emerge over time. However, extensive experimentation will be conducted across multiple algorithms to ensure optimal performance.
 
 ## Evaluation
-### Recommendation System
+### Recommendation System Evaluation
 #### Content-Based Filtering
 The content-based filtering evaluation uses [precision@k](https://medium.com/@m_n_malaeb/recall-and-precision-at-k-for-recommender-systems-618483226c54) where the precision of only k recommendations is measured which are issued. Precision@k is formulated with:
 
@@ -174,7 +174,7 @@ If neural network is used, then the training will be done each epoch. Here is th
 
 ![plot_rmse_recommender](https://github.com/alvinrach/Product-Recommender-System/blob/main/plot_rmse_recommender.png?raw=true)
 
-### Buy Likelihood
+### Purchase Likelihood Evaluation
 
 1. Technical Performance Metrics:
 AUC-ROC will be calculated to measure the model's ability to distinguish between purchasers and non-purchasers across all classification thresholds. AUC-PR (Precision-Recall) will be prioritized over AUC-ROC due to the severe class imbalance inherent in e-commerce conversion rates, as it better reflects performance on the minority class. F1-Score will be computed to balance precision and recall trade-offs, while precision and recall will be evaluated at business-relevant thresholds to optimize for specific campaign targeting requirements.
@@ -198,13 +198,13 @@ Time-based cross-validation will be implemented to prevent data leakage, where m
 
 ## Deploy
 ### Prototyping
-#### Recommendation System
+#### Recommendation System Prototyping
 Here is the prototype for recommendation system in React. For example, user_002 has dry type skin, aging and wrinkles concerns, 35-44 age group and 2 past purchases. Here in the planned dashboard we will show several related products to this user, ordered by match score.
 
 ![Recommender Prototype](https://github.com/alvinrach/recommendation-buy-likelihood/blob/main/images/recommender.png?raw=true)
 
-#### Buy Likelihood
-And this is the prototype of buy likelihood dashboard in React. We have features that we already process, such as sessions, average duration, products viewed and cart adds. In the label or target area we have purchase probability and intent segment, which are:
+#### Purchase Likelihood Prototyping
+And this is the prototype of purchase likelihood dashboard in React. We have features that we already process, such as sessions, average duration, products viewed and cart adds. In the label or target area we have purchase probability and intent segment, which are:
 
 🟢 Green: High probability (>60%) = High Intent = Good for business
 🟡 Yellow: Medium probability (30-60%) = Medium Intent = Moderate
